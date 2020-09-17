@@ -196,6 +196,8 @@ class condGANTrainer(object):
                 fullpath = '%s/G_%s_%d_%d.png'\
                     % (self.image_dir, name, gen_iterations, i)
                 im.save(fullpath)
+            else:
+                print('Image set is none')
 
         # for i in range(len(netsD)):
         i = -1
@@ -370,7 +372,10 @@ class condGANTrainer(object):
 
             batch_size = self.batch_size
             nz = cfg.GAN.Z_DIM
-            noise = Variable(torch.FloatTensor(batch_size, nz), volatile=True)
+
+            noise = None
+            with torch.no_grad():
+                noise = Variable(torch.FloatTensor(batch_size, nz), volatile=True)
             noise = noise.cuda()
 
             model_dir = cfg.TRAIN.NET_G
@@ -515,3 +520,5 @@ class condGANTrainer(object):
                                 im = Image.fromarray(img_set)
                                 fullpath = '%s_a%d.png' % (save_name, k)
                                 im.save(fullpath)
+                            else:
+                                print('Image set is none!')
