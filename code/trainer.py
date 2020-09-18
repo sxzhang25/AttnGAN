@@ -375,7 +375,7 @@ class condGANTrainer(object):
 
             noise = None
             with torch.no_grad():
-                noise = Variable(torch.FloatTensor(batch_size, nz), volatile=True)
+                noise = Variable(torch.FloatTensor(batch_size, nz))
             noise = noise.cuda()
 
             model_dir = cfg.TRAIN.NET_G
@@ -468,13 +468,15 @@ class condGANTrainer(object):
 
                 batch_size = captions.shape[0]
                 nz = cfg.GAN.Z_DIM
-                captions = Variable(torch.from_numpy(captions), volatile=True)
-                cap_lens = Variable(torch.from_numpy(cap_lens), volatile=True)
+                with torch.no_grad():
+                    captions = Variable(torch.from_numpy(captions))
+                    cap_lens = Variable(torch.from_numpy(cap_lens))
 
                 captions = captions.cuda()
                 cap_lens = cap_lens.cuda()
                 for i in range(1):  # 16
-                    noise = Variable(torch.FloatTensor(batch_size, nz), volatile=True)
+                    with torch.no_grad():
+                        noise = Variable(torch.FloatTensor(batch_size, nz))
                     noise = noise.cuda()
                     #######################################################
                     # (1) Extract text embeddings
